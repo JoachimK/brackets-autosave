@@ -7,6 +7,8 @@ define(function (require, exports, module) {
     var Commands            = brackets.getModule("command/Commands");
     var CommandManager      = brackets.getModule("command/CommandManager");
     
+    var AUTOSAVE_INTERVAL = 30 * 1000; // 30s
+    
     
     // initalization
     console.log("loading autosave extension...");
@@ -16,6 +18,6 @@ define(function (require, exports, module) {
     }
     
     AppInit.appReady(function () {
-        window.setInterval(autosaveCurrentDocument, 3000); // autosave every 3 seconds
+        window.setInterval(autosaveCurrentDocument, AUTOSAVE_INTERVAL); // autosave every 3 seconds
     });
 });
