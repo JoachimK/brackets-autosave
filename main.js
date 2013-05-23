@@ -87,13 +87,9 @@ define(function (require, exports, module) {
         
         if (newDocumentToPreview === null) {
             documentToPreview = null;
-            currentError = {type: "NoDocumentError",
-                            message: "No code to evaluate. Please open a Javascript source file."};
         } else {
             if (newDocumentToPreview.getLanguage()._name !== "JavaScript") {
                 documentToPreview = null;
-                currentError = {type: "NotJSCodeError",
-                            message: "Can only evaluate Javascript code. Please open a Javascript source file."};
             } else {
                 documentToPreview = newDocumentToPreview;
             }
