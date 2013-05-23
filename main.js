@@ -18,6 +18,8 @@ define(function (require, exports, module) {
     var webSocketOpen = false,
         openingWebSocket = false;
     
+    var documentToPreview;
+    
     function _openSocket(callOnOpen, callOnMsg) {
         websocket = new WebSocket(wsURI);
         
