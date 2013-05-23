@@ -94,7 +94,48 @@ define(function (require, exports, module) {
         }
     }
     
+    function documentChanged(newDocumentToPreview) {
+        
+        if ((documentToPreview !== undefined) && (documentToPreview !== null)) {
+            $(documentToPreview).off("change.autosave");                                          
+            documentToPreview.releaseRef();
+        }
+        
+        if (newDocumentToPreview === null) {
+            documentToPreview = null;
+            currentError = {type: "NoDocumentError",
+                            message: "No code to evaluate. Please open a Javascript source file."};
+        } else {
+            if (newDocumentToPreview.getLanguage()._name !== "JavaScript") {
+                documentToPreview = null;
+                currentError = {type: "NotJSCodeError",
+                            message: "Can only evaluate Javascript code. Please open a Javascript source file."};
+            } else {
+                documentToPreview = newDocumentToPreview;
+            }
+        }
+        
+        if (documentToPreview === null) {
+            codeToPreview = null;
+        } else {
+            documentToPreview.addRef();
+            $(documentToPreview).on("change.autosave", function () {
+                saveCode(documentToPreview.getText(), theCurrentDocument.file.name);
+            });
+            
+            saveCode(documentToPreview.getText(), theCurrentDocument.file.name);
+        }
+    }
+    
+    // called when the current document changes
+    function _setupLiveCodingEditorForChangedDocument(theEvent) {
+        var theCurrentDocument = DocumentManager.getCurrentDocument();
+        documentChanged(theCurrentDocument);
+    }
+    
     AppInit.appReady(function () {
-        window.setInterval(checkForChanges, AUTOSAVE_INTERVAL); // autosave every 3 seconds
+        $(DocumentManager).on("currentDocumentChange", _setupLiveCodingEditorForChangedDocument);
+        // call the function that will be called when the current document changes. If there is already one it will be set up correctly.
+        _setupLiveCodingEditorForChangedDocument(null);
     });
 });
