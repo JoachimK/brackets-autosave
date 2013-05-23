@@ -78,24 +78,6 @@ define(function (require, exports, module) {
         }
     }
     
-    var lastCode;
-    function checkForChanges() {
-        var theCurrentDocument = DocumentManager.getCurrentDocument(),
-            newCode;
-        if (theCurrentDocument !== null) {
-            newCode = theCurrentDocument.getText();
-            if (newCode && (newCode === lastCode)) {
-                // if there is code and it wasn't changed since the last check
-                if (newCode !== lastSavedCode) {
-                    // but it is not the same code we have already saved
-                    // then save it now
-                    saveCode(newCode, theCurrentDocument.file.name);
-                }
-            }
-            lastCode = newCode;
-        }
-    }
-    
     function documentChanged(newDocumentToPreview) {
         
         if ((documentToPreview !== undefined) && (documentToPreview !== null)) {
@@ -122,10 +104,10 @@ define(function (require, exports, module) {
         } else {
             documentToPreview.addRef();
             $(documentToPreview).on("change.autosave", function () {
-                saveCode(documentToPreview.getText(), theCurrentDocument.file.name);
+                saveCode(documentToPreview.getText(), documentToPreview.file.name);
             });
             
-            saveCode(documentToPreview.getText(), theCurrentDocument.file.name);
+            saveCode(documentToPreview.getText(), documentToPreview.file.name);
         }
     }
     
