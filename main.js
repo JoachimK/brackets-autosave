@@ -96,7 +96,7 @@ define(function (require, exports, module) {
         }
         
         if (documentToPreview === null) {
-            codeToPreview = null;
+            // do nothing
         } else {
             documentToPreview.addRef();
             $(documentToPreview).on("change.autosave", function () {
